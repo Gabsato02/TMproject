@@ -1,3 +1,9 @@
+<?php 
+
+include (__DIR__.'/../manager.php');
+
+?>
+
 <!DOCTYPE html>
 
 <html lang="ot-br">
@@ -13,17 +19,24 @@
 
   <title>TM Project - Comidas</title>
 
+  <script defer>
+    function confirmDelete() {
+      confirm('Deseja deletar o registro?');
+    }
+  </script>}
+
+
 </head>
 
 <body>
 
   <?php include('layouts/header.php'); ?>
 
-  <main class='m-5'>
+  <main class='m-5 min-vh-100'>
 
     <h1 class='display-6 pt-5 pb-3'>Comidas</h1>
 
-    <form>
+    <form method='POST' action='' enctype='multipart/form-data'>
 
       <div class='row'>
 
@@ -34,16 +47,20 @@
             name='name' 
             class='form-control' 
             placeholder='ex. Camemburguer'
+            required
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['name']; ?>"
           >
         </div>
 
         <div class='form-group col-3'>
-          <label for='flavor'>Sabor</label>
+          <label for='flavour'>Sabor</label>
           <input 
             type='text' 
-            name='flavor' 
+            name='flavour' 
             class='form-control' 
             placeholder='ex. Salgado'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['flavour']; ?>"
+            required
           >
         </div>
 
@@ -54,6 +71,7 @@
             name='restaurant' 
             class='form-control' 
             placeholder='ex. Seven Kings Burguer'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['restaurant']; ?>"
           >
         </div>
 
@@ -66,6 +84,7 @@
             min='0' 
             max='10' 
             placeholder='ex. 10'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['rating']; ?>"
           >
         </div>
 
@@ -80,8 +99,7 @@
             class="form-control" 
             rows="3" 
             style="resize: none"
-            >
-          </textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['description'];?></textarea>
         </div>
 
         <div class='form-group col-6'>
@@ -91,19 +109,71 @@
             class="form-control" 
             rows="3" 
             style="resize: none"
-            >
-          </textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['observation'];?></textarea>
         </div>
 
       </div>
 
       <div class='row'>
         <div class='form-group d-flex justify-content-end'>
-          <button class='btn btn-md btn-success mt-2 w-25 justify-self-end'>Salvar</button>
+          <button class='btn btn-md btn-success mt-2 w-25 justify-self-end' name='save' value='food'>Salvar</button>
         </div>
       </div>
 
     </form>
+
+    <section class='mt-5'>
+
+      <table class='table table-bordered table-striped table-sm'>
+
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Sabor</th>
+            <th>Restaurante</th>
+            <th>Descrição</th>
+            <th>Observações</th>
+            <th>Nota</th>
+            <th class='text-center'>Gerenciar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          
+          <tr>
+            <?php 
+              $listFoods = $tm->food->getData();
+              if ($listFoods) {
+                foreach($listFoods as $food) {
+                  echo "<tr>
+                    <td>{$food['name']}</td>
+                    <td>{$food['flavour']}</td>
+                    <td>{$food['restaurant']}</td>
+                    <td>{$food['description']}</td>
+                    <td>{$food['observation']}</td>
+                    <td>{$food['rating']}</td>
+                    <td scope='col' class='d-flex justify-content-evenly'>
+                      <form action='?id={$food['id']}' method='POST' enctype='multipart/form-data'>
+                        <button class='btn btn-sm btn-success' name='edit' value='food'>
+                          <i class='fas fa-edit text-white'></i>
+                        </button>
+                        <button class='btn btn-sm btn-danger' name='delete' value='food' onclick='confirmDelete();'>
+                          <i class='fas fa-trash-alt text-white'></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>";
+                } 
+              } else {
+                echo "<tr><td class='text-muted text-center' colspan='7'>Não há registros</td></tr>";
+              }
+            ?>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </section>
 
   </main>
 

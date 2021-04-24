@@ -32,7 +32,7 @@ include (__DIR__.'/../manager.php');
 
   <?php include('layouts/header.php'); ?>
 
-  <main class='m-5'>
+  <main class='m-5 min-vh-100'>
 
     <h1 class='display-6 pt-5 pb-3'>Filmes</h1>
 
@@ -48,7 +48,7 @@ include (__DIR__.'/../manager.php');
             class='form-control' 
             placeholder='ex. O Senhor dos Anéis'
             required
-            value="<?php if($tm->editMovie) echo $tm->editMovie[0]['name']; ?>"
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['name']; ?>"
           >
         </div>
 
@@ -59,8 +59,7 @@ include (__DIR__.'/../manager.php');
             name='genre' 
             class='form-control' 
             placeholder='ex. Aventura'
-            value="<?php if($tm->editMovie) echo $tm->editMovie[0]['genre']; ?>"
-            required
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['genre']; ?>"
           >
         </div>
 
@@ -71,7 +70,7 @@ include (__DIR__.'/../manager.php');
             name='director' 
             class='form-control' 
             placeholder='ex. Peter Jackson'
-            value="<?php if($tm->editMovie) echo $tm->editMovie[0]['director']; ?>"
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['director']; ?>"
           >
         </div>
 
@@ -84,7 +83,7 @@ include (__DIR__.'/../manager.php');
             min='0' 
             max='10' 
             placeholder='ex. 10'
-            value="<?php if($tm->editMovie) echo $tm->editMovie[0]['rating']; ?>"
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['rating']; ?>"
             required
           >
         </div>
@@ -100,7 +99,7 @@ include (__DIR__.'/../manager.php');
             class="form-control" 
             rows="3" 
             style="resize: none"
-            ><?php if($tm->editMovie) echo $tm->editMovie[0]['description'];?></textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['description'];?></textarea>
         </div>
 
         <div class='form-group col-6'>
@@ -110,8 +109,7 @@ include (__DIR__.'/../manager.php');
             class="form-control" 
             rows="3" 
             style="resize: none"
-            required
-            ><?php if($tm->editMovie) echo $tm->editMovie[0]['observation'];?></textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['observation'];?></textarea>
         </div>
 
       </div>
@@ -133,9 +131,9 @@ include (__DIR__.'/../manager.php');
             <th>Título</th>
             <th>Gênero</th>
             <th>Diretor</th>
-            <th>Nota</th>
             <th>Descrição</th>
             <th>Observações</th>
+            <th>Nota</th>
             <th class='text-center'>Gerenciar</th>
           </tr>
         </thead>
@@ -144,15 +142,16 @@ include (__DIR__.'/../manager.php');
           
           <tr>
             <?php 
-              if ($tm->listMovies) {
-                foreach($tm->listMovies as $movie) {
+              $listMovies = $tm->movie->getData();
+              if ($listMovies) {
+                foreach($listMovies as $movie) {
                   echo "<tr>
                     <td>{$movie['name']}</td>
                     <td>{$movie['genre']}</td>
                     <td>{$movie['director']}</td>
-                    <td>{$movie['rating']}</td>
                     <td>{$movie['description']}</td>
                     <td>{$movie['observation']}</td>
+                    <td>{$movie['rating']}</td>
                     <td scope='col' class='d-flex justify-content-evenly'>
                       <form action='?id={$movie['id']}' method='POST' enctype='multipart/form-data'>
                         <button class='btn btn-sm btn-success' name='edit' value='movie'>

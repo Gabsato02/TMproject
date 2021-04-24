@@ -18,7 +18,7 @@
 
   <?php include('layouts/header.php'); ?>
 
-  <main>
+  <main class='min-vh-100'>
     <section class='m-5 pt-5'>
       <span>Olá, bem vindo ao <h1 class='display-6'>Taste Manager</h1></span>
       <p class='mt-5 mx-2'>Classifique todo tipo de coisa que você consumir, desde filmes a comidas, dando notas e recordando suas opiniões.</p>

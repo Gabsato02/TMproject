@@ -1,6 +1,12 @@
+<?php 
+
+include (__DIR__.'/../manager.php');
+
+?>
+
 <!DOCTYPE html>
 
-<html lang="ot-br">
+<html lang="pt-br">
 
 <head>
 
@@ -13,17 +19,24 @@
 
   <title>TM Project - Jogos</title>
 
+  <script defer>
+    function confirmDelete() {
+      confirm('Deseja deletar o registro?');
+    }
+
+  </script>
+
 </head>
 
 <body>
 
   <?php include('layouts/header.php'); ?>
 
-  <main class='m-5'>
+  <main class='m-5 min-vh-100'>
 
     <h1 class='display-6 pt-5 pb-3'>Jogos</h1>
 
-    <form>
+    <form method='POST' action='' enctype='multipart/form-data'>
 
       <div class='row'>
 
@@ -33,7 +46,9 @@
             type='text' 
             name='name' 
             class='form-control' 
-            placeholder='ex. God of War'
+            placeholder='ex. Red Dead Redemption 2'
+            required
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['name']; ?>"
           >
         </div>
 
@@ -43,17 +58,19 @@
             type='text' 
             name='genre' 
             class='form-control' 
-            placeholder='ex. Aventura'
+            placeholder='ex. Ação'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['genre']; ?>"
           >
         </div>
 
         <div class='form-group col-3'>
-          <label for='platform'>Plataforma</label>
+          <label for='director'>Plataforma</label>
           <input 
             type='text' 
             name='platform' 
             class='form-control' 
             placeholder='ex. PS4'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['platform']; ?>"
           >
         </div>
 
@@ -66,6 +83,8 @@
             min='0' 
             max='10' 
             placeholder='ex. 10'
+            value="<?php if($tm->editItem) echo $tm->editItem[0]['rating']; ?>"
+            required
           >
         </div>
 
@@ -80,8 +99,7 @@
             class="form-control" 
             rows="3" 
             style="resize: none"
-            >
-          </textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['description'];?></textarea>
         </div>
 
         <div class='form-group col-6'>
@@ -91,19 +109,71 @@
             class="form-control" 
             rows="3" 
             style="resize: none"
-            >
-          </textarea>
+            ><?php if($tm->editItem) echo $tm->editItem[0]['observation'];?></textarea>
         </div>
 
       </div>
 
       <div class='row'>
         <div class='form-group d-flex justify-content-end'>
-          <button class='btn btn-md btn-success mt-2 w-25 justify-self-end'>Salvar</button>
+          <button class='btn btn-md btn-success mt-2 w-25 justify-self-end' name='save' value='game'>Salvar</button>
         </div>
       </div>
 
     </form>
+
+    <section class='mt-5'>
+
+      <table class='table table-bordered table-striped table-sm'>
+
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Gênero</th>
+            <th>Plataforma</th>
+            <th>Descrição</th>
+            <th>Observações</th>
+            <th>Nota</th>
+            <th class='text-center'>Gerenciar</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          
+          <tr>
+            <?php 
+              $listGames = $tm->game->getData();
+              if ($listGames) {
+                foreach($listGames as $game) {
+                  echo "<tr>
+                    <td>{$game['name']}</td>
+                    <td>{$game['genre']}</td>
+                    <td>{$game['platform']}</td>
+                    <td>{$game['description']}</td>
+                    <td>{$game['observation']}</td>
+                    <td>{$game['rating']}</td>
+                    <td scope='col' class='d-flex justify-content-evenly'>
+                      <form action='?id={$game['id']}' method='POST' enctype='multipart/form-data'>
+                        <button class='btn btn-sm btn-success' name='edit' value='game'>
+                          <i class='fas fa-edit text-white'></i>
+                        </button>
+                        <button class='btn btn-sm btn-danger' name='delete' value='game' onclick='confirmDelete();'>
+                          <i class='fas fa-trash-alt text-white'></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>";
+                } 
+              } else {
+                echo "<tr><td class='text-muted text-center' colspan='7'>Não há registros</td></tr>";
+              }
+            ?>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </section>
 
   </main>
 

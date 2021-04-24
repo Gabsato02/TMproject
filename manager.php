@@ -1,22 +1,24 @@
 <?php
 
 require('classes/Movie.class.php');
+require('classes/Food.class.php');
+require('classes/Game.class.php');
 
 class TasteManager {
 
-  private $movie;
-  public $listMovies;
-  public $editMovie;
+  public $movie;
+  public $food;
+  public $game;
+  public $editItem;
 
   public function __construct() {
 
-    echo "\n\n --- COMEÇO DO PROGRAMA --- \n\n";
-
     $this->movie = new Movie;
+    $this->food = new Food;
+    $this->game = new Game;
 
     $this->executeFunction();
 
-    $this->listMovies = $this->movie->getData();
   }
 
   private function executeFunction () {
@@ -24,7 +26,13 @@ class TasteManager {
     if (isset($_POST['save']) && !isset($_GET['id'])) {
       switch($_POST['save']) {
         case 'movie':
-          $this->addMovie();
+          $this->add($this->movie);
+          break;
+        case 'food':
+          $this->add($this->food);
+          break;
+        case 'game':
+          $this->add($this->game);
           break;
         default:
           break;
@@ -32,7 +40,13 @@ class TasteManager {
     } else if (isset($_POST['save']) && isset($_GET['id'])) {
         switch($_POST['save']) {
           case 'movie':
-            $this->updateMovie();
+            $this->update($this->movie);
+            break;
+          case 'food':
+            $this->update($this->food);
+            break;
+          case 'game':
+            $this->update($this->game);
             break;
           default:
             break;
@@ -42,7 +56,13 @@ class TasteManager {
     if (isset($_POST['delete'])) {
       switch($_POST['delete']) {
         case 'movie':
-          $this->deleteMovie();
+          $this->delete($this->movie);
+          break;
+        case 'food':
+          $this->delete($this->food);
+          break;
+        case 'game':
+          $this->delete($this->game);
           break;
         default:
           break;
@@ -52,7 +72,13 @@ class TasteManager {
     if (isset($_POST['edit'])) {
       switch($_POST['edit']) {
         case 'movie':
-          $this->editMovie();
+          $this->edit($this->movie);
+          break;
+        case 'food':
+          $this->edit($this->food);
+          break;
+        case 'game':
+          $this->edit($this->game);
           break;
         default:
           break;
@@ -60,21 +86,21 @@ class TasteManager {
     }
   }
 
-  private function addMovie() {
+  private function add(object $object) {
 
-    $addMovie = $this->movie->setData($_POST);
+    $add = $object->setData($_POST);
 
-    if ($addMovie) $this->movie->insert();
+    if ($add) $object->insert();
 
     $_POST = array();
 
   }
 
-  private function deleteMovie() {
+  private function delete(object $object) {
 
-    $deleteMovie = $this->movie->setData($_GET);
+    $delete = $object->setData($_GET);
 
-    if ($deleteMovie) $this->movie->delete();
+    if ($delete) $object->delete();
 
     $_POST = array();
     $_GET = array();
@@ -83,18 +109,18 @@ class TasteManager {
 
   }
 
-  private function editMovie() {
+  private function edit(object $object) {
 
-    $editMovie = $this->movie->setData($_GET);
-    $this->editMovie = $this->movie->getData($_GET['id']);
+    $edit = $object->setData($_GET);
+    $this->editItem = $object->getData($_GET['id']);
 
   }
 
-  private function updateMovie() {
+  private function update(object $object) {
 
-    $updateMovie = $this->movie->setData($_POST);
+    $update = $object->setData($_POST);
     
-    if ($updateMovie) $this->movie->update();
+    if ($update) $object->update();
 
     $_POST = array();
     $_GET = array();
