@@ -17,12 +17,48 @@ class TasteManager {
     $this->food = new Food;
     $this->game = new Game;
 
-    $this->executeFunction();
+    $this->identifyFunction();
 
   }
 
-  private function executeFunction () {
+  private function identifyFunction () {
 
+    if (isset($_POST['save']) && !isset($_GET['id'])) {
+
+      $this->executeFunction('save', 'add');
+
+    } else if (isset($_POST['save']) && isset($_GET['id'])) {
+
+      $this->executeFunction('save', 'update');
+
+    }
+
+    if (isset($_POST['delete'])) $this->executeFunction('delete', 'delete');
+
+    if (isset($_POST['edit'])) $this->executeFunction('edit', 'edit');
+
+  }
+
+  private function executeFunction(string $postName, string $functionName) {
+
+    switch($_POST[$postName]) {
+        case 'movie':
+          $this->$functionName($this->movie);
+          break;
+        case 'food':
+          $this->$functionName($this->food);
+          break;
+        case 'game':
+          $this->$functionName($this->game);
+          break;
+        default:
+          break;
+      }
+  }
+
+/*   O CÓDIGO ABAIXO ESTÁ SENDO SUBSTITUÍDO PELO PRINCÍPIO DE Single Responsibility DO SOLID - CÓDIGO REFATORADO ACIMA
+
+  private function executeFunction () {
     if (isset($_POST['save']) && !isset($_GET['id'])) {
       switch($_POST['save']) {
         case 'movie':
@@ -84,7 +120,7 @@ class TasteManager {
           break;
       }
     }
-  }
+  } */
 
   private function add(object $object) {
 
