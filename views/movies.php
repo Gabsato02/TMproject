@@ -116,7 +116,16 @@ include (__DIR__.'/../manager.php');
 
       <div class='row'>
         <div class='form-group d-flex justify-content-end'>
-          <button class='btn btn-md btn-success mt-2 w-25 justify-self-end' name='save' value='movie'>Salvar</button>
+          <button 
+            class='btn btn-md btn-success mt-2 w-25 justify-self-end' 
+            name="<?php echo ($tm->editItem) ? 'update' : 'save' ?>" 
+            value='movie'
+          >
+            <?php 
+              $buttonAction = ($tm->editItem) ? 'Atualizar' : 'Salvar';
+              echo $buttonAction;
+            ?>
+          </button>
         </div>
       </div>
 
