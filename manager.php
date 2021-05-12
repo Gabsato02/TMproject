@@ -21,76 +21,63 @@ class TasteManager {
 
   }
 
-  private function executeFunction () {
+  private function executeFunction() {
+    
+    if (key($_POST)) {
 
-    if (isset($_POST['save']) && !isset($_GET['id'])) {
-      switch($_POST['save']) {
-        case 'movie':
-          $this->add($this->movie);
-          break;
-        case 'food':
-          $this->add($this->food);
-          break;
-        case 'game':
-          $this->add($this->game);
-          break;
-        default:
-          break;
-      }
-    } else if (isset($_POST['save']) && isset($_GET['id'])) {
-        switch($_POST['save']) {
-          case 'movie':
-            $this->update($this->movie);
-            break;
-          case 'food':
-            $this->update($this->food);
-            break;
-          case 'game':
-            $this->update($this->game);
-            break;
-          default:
-            break;
-      } 
+      $functionName = array_key_last($_POST);
+
+      $object = $_POST[$functionName];
+
+      $this->$functionName($this->$object);
+      
     }
 
-    if (isset($_POST['delete'])) {
-      switch($_POST['delete']) {
-        case 'movie':
-          $this->delete($this->movie);
-          break;
-        case 'food':
-          $this->delete($this->food);
-          break;
-        case 'game':
-          $this->delete($this->game);
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (isset($_POST['edit'])) {
-      switch($_POST['edit']) {
-        case 'movie':
-          $this->edit($this->movie);
-          break;
-        case 'food':
-          $this->edit($this->food);
-          break;
-        case 'game':
-          $this->edit($this->game);
-          break;
-        default:
-          break;
-      }
-    }
   }
 
-  private function add(object $object) {
+/* AS FUNÇÕES ABAIXO FORAM SUBSTITUÍDAS PELA FUNÇÃO ACIMA, QUE PERMITE A ADIÇÃO DE NOVAS FUNÇÕES A SEREM EXECUTADAS
+SEM A NECESSIDADE DE ALTERAR O CÓDIGO EXISTENTE
 
-    $add = $object->setData($_POST);
+  private function identifyFunction () {
 
-    if ($add) $object->insert();
+    if (isset($_POST['save']) && !isset($_GET['id'])) {
+
+      $this->executeFunction('save', 'add');
+
+    } else if (isset($_POST['save']) && isset($_GET['id'])) {
+
+      $this->executeFunction('save', 'update');
+
+    }
+
+    if (isset($_POST['delete'])) $this->executeFunction('delete', 'delete');
+
+    if (isset($_POST['edit'])) $this->executeFunction('edit', 'edit');
+
+  }
+
+  private function executeFunction(string $postName, string $functionName) {
+
+    switch($_POST[$postName]) {
+        case 'movie':
+          $this->$functionName($this->movie);
+          break;
+        case 'food':
+          $this->$functionName($this->food);
+          break;
+        case 'game':
+          $this->$functionName($this->game);
+          break;
+        default:
+          break;
+      }
+  } */
+
+  private function save(object $object) {
+
+    $save = $object->setData($_POST);
+
+    if ($save) $object->insert();
 
     $_POST = array();
 
@@ -105,7 +92,7 @@ class TasteManager {
     $_POST = array();
     $_GET = array();
 
-    $this->clearUrl();
+    $this->resetUrl();
 
   }
 
@@ -125,11 +112,11 @@ class TasteManager {
     $_POST = array();
     $_GET = array();
 
-    $this->clearUrl();
+    $this->resetUrl();
 
   }
 
-  private function clearUrl() {
+  private function resetUrl() {
     (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? $url = "https://" : $url = "http://";
 
     $url.= $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];   
