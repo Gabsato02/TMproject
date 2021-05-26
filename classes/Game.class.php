@@ -65,19 +65,21 @@ Class Game extends Category implements iGame {
     return false;
   }
 
-  public function delete() {
+  public function delete():bool {
 
     if ($this->id) {
 
       $statement = $this->prepare('DELETE FROM games WHERE id = :id');
 
-      $statement->execute(['id' => $this->id]);
+      if ($statement->execute(['id' => $this->id])) return true;
+
+      return false;
 
     } 
   
   }
 
-  public function update() {
+  public function update():bool {
 
     $statement = $this->prepare('UPDATE games SET 
                                 name = :name, 
@@ -88,13 +90,15 @@ Class Game extends Category implements iGame {
                                 rating = :rating
                                 WHERE id = :id');
 
-    $statement->execute([':name' => $this->name,
+    if ($statement->execute([':name' => $this->name,
                           ':genre' => $this->genre,
                           ':platform' => $this->platform,
                           ':description' => $this->description,
                           ':observation' => $this->observation,
                           ':rating' => $this->rating,
-                          ':id' => $this->id]);
+                          ':id' => $this->id])) return true;
+
+    return false;
 
   }
 }

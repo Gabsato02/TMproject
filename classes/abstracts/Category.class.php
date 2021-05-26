@@ -15,4 +15,8 @@ abstract class Category extends DataBase {
     parent::__construct();
       
   }
+
+  abstract protected function insert():bool;
+  abstract protected function update():bool;
+  abstract protected function delete():bool;
 }

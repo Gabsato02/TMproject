@@ -65,19 +65,21 @@ Class Food extends Category implements iFood {
     return false;
   }
 
-  public function delete() {
+  public function delete():bool {
 
     if ($this->id) {
 
       $statement = $this->prepare('DELETE FROM foods WHERE id = :id');
 
-      $statement->execute(['id' => $this->id]);
+      if ($statement->execute(['id' => $this->id])) return true;
+
+      return false;
 
     } 
   
   }
 
-  public function update() {
+  public function update():bool {
 
     $statement = $this->prepare('UPDATE foods SET 
                                 name = :name, 
@@ -88,13 +90,15 @@ Class Food extends Category implements iFood {
                                 rating = :rating
                                 WHERE id = :id');
 
-    $statement->execute([':name' => $this->name,
+    if ($statement->execute([':name' => $this->name,
                           ':flavour' => $this->flavour,
                           ':restaurant' => $this->restaurant,
                           ':description' => $this->description,
                           ':observation' => $this->observation,
                           ':rating' => $this->rating,
-                          ':id' => $this->id]);
+                          ':id' => $this->id])) return true;
+
+    return false;
 
   }
 }
