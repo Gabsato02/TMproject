@@ -35,44 +35,6 @@ class TasteManager {
 
   }
 
-/* AS FUNÇÕES ABAIXO FORAM SUBSTITUÍDAS PELA FUNÇÃO ACIMA, QUE PERMITE A ADIÇÃO DE NOVAS FUNÇÕES A SEREM EXECUTADAS
-SEM A NECESSIDADE DE ALTERAR O CÓDIGO EXISTENTE
-
-  private function identifyFunction () {
-
-    if (isset($_POST['save']) && !isset($_GET['id'])) {
-
-      $this->executeFunction('save', 'add');
-
-    } else if (isset($_POST['save']) && isset($_GET['id'])) {
-
-      $this->executeFunction('save', 'update');
-
-    }
-
-    if (isset($_POST['delete'])) $this->executeFunction('delete', 'delete');
-
-    if (isset($_POST['edit'])) $this->executeFunction('edit', 'edit');
-
-  }
-
-  private function executeFunction(string $postName, string $functionName) {
-
-    switch($_POST[$postName]) {
-        case 'movie':
-          $this->$functionName($this->movie);
-          break;
-        case 'food':
-          $this->$functionName($this->food);
-          break;
-        case 'game':
-          $this->$functionName($this->game);
-          break;
-        default:
-          break;
-      }
-  } */
-
   private function save(object $object) {
 
     $save = $object->setData($_POST);
