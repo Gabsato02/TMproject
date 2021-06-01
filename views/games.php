@@ -1,6 +1,6 @@
 <?php 
 
-include (__DIR__.'/../manager.php');
+include (__DIR__.'/../main.php');
 
 ?>
 

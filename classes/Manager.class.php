@@ -1,8 +1,6 @@
 <?php
 
-require('classes/Movie.class.php');
-require('classes/Food.class.php');
-require('classes/Game.class.php');
+require('factories/CategoryFactory.class.php');
 
 class TasteManager {
 
@@ -13,9 +11,9 @@ class TasteManager {
 
   public function __construct() {
 
-    $this->movie = new Movie;
-    $this->food = new Food;
-    $this->game = new Game;
+    $this->movie = CategoryFactory::buildCategory('movie');
+    $this->food = CategoryFactory::buildCategory('food');
+    $this->game = CategoryFactory::buildCategory('game');
 
     $this->executeFunction();
 
@@ -88,5 +86,3 @@ class TasteManager {
     header('Location: '.$url);  
   }
 }
-
-$tm = new TasteManager;
